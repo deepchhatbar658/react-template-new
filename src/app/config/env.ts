@@ -39,3 +39,11 @@ export const env = Object.freeze({
   appName: result.data.VITE_APP_NAME,
   enableMsw: result.data.VITE_ENABLE_MSW,
 });
+
+export const startDevelopmentMocks = async (): Promise<void> => {
+  // Keeping this compile-time check next to the dynamic import lets Vite omit
+  // MSW and its handlers entirely from production output.
+  if (!import.meta.env.DEV || !env.enableMsw) return;
+  const { worker } = await import('@/mocks/browser');
+  await worker.start({ onUnhandledRequest: 'bypass' });
+};

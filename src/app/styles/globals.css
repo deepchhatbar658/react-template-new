@@ -45,7 +45,7 @@ button,
   border-radius: var(--radius-sm);
   padding: 0.6rem 1rem;
   background: var(--color-primary);
-  color: white;
+  color: var(--color-on-primary);
   font-weight: 700;
   text-decoration: none;
   cursor: pointer;
@@ -92,7 +92,7 @@ p {
 
 .eyebrow {
   color: var(--color-primary);
-  font-size: 0.8rem;
+  font-size: var(--font-size-xs);
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.08em;

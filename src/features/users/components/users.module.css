@@ -37,6 +37,10 @@
   border-radius: var(--radius-md);
   background: var(--color-surface);
 }
+.detail:focus {
+  outline: none;
+  box-shadow: var(--shadow-overlay), var(--focus-ring);
+}
 
 .detail {
   position: sticky;
@@ -114,7 +118,15 @@ td > span {
 }
 .dangerButton {
   background: var(--color-danger);
-  color: white;
+  color: var(--color-on-danger);
+}
+
+.mutationMessage {
+  flex-basis: 100%;
+  margin: 0;
+  color: var(--color-danger);
+  font-size: var(--font-size-xs);
+  text-align: right;
 }
 
 .pagination {

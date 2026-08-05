@@ -35,6 +35,9 @@ test('creates, edits, and deletes a user', async ({ page }) => {
     .locator('header')
     .getByRole('button', { name: 'Create user' })
     .click();
+  await expect(
+    page.getByRole('complementary', { name: 'Create user' }),
+  ).toBeFocused();
   await page.getByLabel('Name').fill('Lin Chen');
   await page.getByLabel('Email').fill('lin@example.com');
   await page
@@ -44,12 +47,19 @@ test('creates, edits, and deletes a user', async ({ page }) => {
   const row = page.getByRole('row', { name: /Lin Chen/ });
   await expect(row).toBeVisible();
   await row.getByRole('button', { name: 'Edit' }).click();
+  await expect(
+    page.getByRole('complementary', { name: 'Edit user' }),
+  ).toBeFocused();
   await page.getByLabel('Name').fill('Lin Chen Updated');
   await page.getByRole('button', { name: 'Save changes' }).click();
   const updatedRow = page.getByRole('row', { name: /Lin Chen Updated/ });
   await expect(updatedRow).toBeVisible();
   await updatedRow.getByRole('button', { name: 'Delete' }).click();
-  await updatedRow.getByRole('button', { name: 'Confirm delete' }).click();
+  const confirmDelete = updatedRow.getByRole('button', {
+    name: 'Confirm delete',
+  });
+  await expect(confirmDelete).toBeFocused();
+  await confirmDelete.click();
   await expect(updatedRow).not.toBeVisible();
 });
 

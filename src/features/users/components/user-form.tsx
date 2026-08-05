@@ -95,6 +95,7 @@ export function UserForm({
         <input
           id="user-name"
           aria-invalid={Boolean(errors.name)}
+          aria-describedby={errors.name ? 'user-name-error' : undefined}
           {...register('name')}
         />
       </FormField>
@@ -103,12 +104,18 @@ export function UserForm({
           id="user-email"
           type="email"
           aria-invalid={Boolean(errors.email)}
+          aria-describedby={errors.email ? 'user-email-error' : undefined}
           {...register('email')}
         />
       </FormField>
       <div className={styles.formRow}>
         <FormField id="user-role" label="Role" error={errors.role?.message}>
-          <select id="user-role" {...register('role')}>
+          <select
+            id="user-role"
+            aria-invalid={Boolean(errors.role)}
+            aria-describedby={errors.role ? 'user-role-error' : undefined}
+            {...register('role')}
+          >
             <option value="admin">Admin</option>
             <option value="member">Member</option>
             <option value="viewer">Viewer</option>
@@ -119,7 +126,12 @@ export function UserForm({
           label="Status"
           error={errors.status?.message}
         >
-          <select id="user-status" {...register('status')}>
+          <select
+            id="user-status"
+            aria-invalid={Boolean(errors.status)}
+            aria-describedby={errors.status ? 'user-status-error' : undefined}
+            {...register('status')}
+          >
             <option value="active">Active</option>
             <option value="invited">Invited</option>
             <option value="suspended">Suspended</option>
@@ -156,7 +168,11 @@ function FormField({
     <div className={styles.field}>
       <label htmlFor={id}>{label}</label>
       {children}
-      {error ? <p id={`${id}-error`}>{error}</p> : null}
+      {error ? (
+        <p id={`${id}-error`} role="alert">
+          {error}
+        </p>
+      ) : null}
     </div>
   );
 }

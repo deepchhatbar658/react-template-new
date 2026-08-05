@@ -6,10 +6,7 @@ import {
   isRetryableStatus,
   safeHttpMessage,
 } from './api-error';
-import {
-  createAuthRefreshCoordinator,
-  type AuthRefreshCoordinator,
-} from './auth-refresh';
+import { type AuthRefreshCoordinator } from './auth-refresh';
 import type {
   ApiMutationOptions,
   ApiRequestObservation,
@@ -72,10 +69,14 @@ export class ApiClient {
   }
 
   configure(config: {
+    authRefresh?: AuthRefreshCoordinator;
     backendErrorAdapter?: BackendErrorAdapter;
     baseUrl: string;
   }): void {
     this.baseUrl = config.baseUrl;
+    if (config.authRefresh) {
+      this.authRefresh = config.authRefresh;
+    }
     if (config.backendErrorAdapter) {
       this.backendErrorAdapter = config.backendErrorAdapter;
     }
@@ -258,18 +259,11 @@ export class ApiClient {
 
 export const apiClient = new ApiClient({ baseUrl: '/api' });
 
-const refreshCoordinator = createAuthRefreshCoordinator({
-  refresh: async () => {
-    await apiClient.post('/auth/refresh', {
-      metadata: { operationName: 'refresh-session', skipAuthRefresh: true },
-    });
-  },
-});
-
-apiClient.setAuthRefresh(refreshCoordinator);
-
 export const configureApiClient = (
-  config: Pick<ApiClientConfig, 'backendErrorAdapter' | 'baseUrl'>,
+  config: Pick<
+    ApiClientConfig,
+    'authRefresh' | 'backendErrorAdapter' | 'baseUrl'
+  >,
 ): void => {
   apiClient.configure(config);
 };

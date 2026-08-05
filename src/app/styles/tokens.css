@@ -16,8 +16,10 @@ FORM: Restrained operations ledger, first-ranked for clarity; seed key operate-l
   --color-border: #d8deea;
   --color-primary: #4f46e5;
   --color-primary-hover: #3730a3;
+  --color-on-primary: #ffffff;
   --color-primary-soft: #eeedff;
   --color-danger: #b42318;
+  --color-on-danger: #ffffff;
   --color-danger-soft: #fff0ed;
   --color-success: #16794a;
   --color-success-soft: #e8f7ef;
@@ -57,8 +59,10 @@ FORM: Restrained operations ledger, first-ranked for clarity; seed key operate-l
     --color-border: #344158;
     --color-primary: #8b83ff;
     --color-primary-hover: #a9a4ff;
+    --color-on-primary: #111827;
     --color-primary-soft: #292654;
     --color-danger: #ff9b8f;
+    --color-on-danger: #111827;
     --color-danger-soft: #4a201d;
     --color-success: #65d49c;
     --color-success-soft: #163a2a;

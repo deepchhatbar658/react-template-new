@@ -79,15 +79,15 @@ VITE_ENABLE_MSW=true
 
 `src/app/config/env.ts` validates them at startup. Never place secrets in frontend environment files.
 
-Set `VITE_ENABLE_MSW=false` to disable browser mocking. Tests still start their Node MSW server explicitly. The mock worker is generated at `public/mockServiceWorker.js` and must remain aligned with the installed MSW version.
+Set `VITE_ENABLE_MSW=false` to disable browser mocking during development. Tests still start their Node MSW server explicitly. The mock worker is generated at `public/mockServiceWorker.js` and must remain aligned with the installed MSW version. The production build removes the development-only MSW import, handlers, and mock data regardless of this variable.
 
 ## Production and deployment
 
 ```bash
-VITE_ENABLE_MSW=false pnpm build
+pnpm build
 pnpm preview
 ```
 
-Serve `dist/` as static assets, configure SPA fallback to `index.html`, use HTTPS, and set the backend cookie/CORS/CSRF policy for the frontend origin. Prefer a same-origin `/api` reverse proxy. Do not ship browser MSW in production unless a deliberate non-production environment requires it.
+Serve `dist/` as static assets, configure SPA fallback to `index.html`, use HTTPS, and set the backend cookie/CORS/CSRF policy for the frontend origin. Prefer a same-origin `/api` reverse proxy. Browser MSW is available only from the Vite development build and is not included in production assets.
 
 Start with [architecture.md](docs/architecture.md), then use [adding-a-feature.md](docs/adding-a-feature.md) or [adding-an-endpoint.md](docs/adding-an-endpoint.md).

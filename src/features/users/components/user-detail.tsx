@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
+import type { Ref } from 'react';
 
 import { ErrorState } from '@/shared/components/error-state/error-state';
 import { LoadingState } from '@/shared/components/loading-state/loading-state';
@@ -11,27 +12,44 @@ export function UserDetail({
   id,
   onClose,
   onEdit,
+  panelRef,
 }: {
   id: string;
   onClose: () => void;
   onEdit: (user: User) => void;
+  panelRef: Ref<HTMLElement>;
 }) {
   const query = useQuery(userDetailQueryOptions(id));
   if (query.isPending)
     return (
-      <aside className={styles.detail}>
+      <aside
+        ref={panelRef}
+        className={styles.detail}
+        aria-label="User detail"
+        tabIndex={-1}
+      >
         <LoadingState label="Loading user…" />
       </aside>
     );
   if (query.isError)
     return (
-      <aside className={styles.detail}>
+      <aside
+        ref={panelRef}
+        className={styles.detail}
+        aria-label="User detail"
+        tabIndex={-1}
+      >
         <ErrorState error={query.error} onRetry={() => void query.refetch()} />
       </aside>
     );
   const user = query.data;
   return (
-    <aside className={styles.detail} aria-label="User detail">
+    <aside
+      ref={panelRef}
+      className={styles.detail}
+      aria-label="User detail"
+      tabIndex={-1}
+    >
       <div className={styles.formHeading}>
         <div>
           <p className="eyebrow">User detail</p>

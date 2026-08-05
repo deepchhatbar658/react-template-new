@@ -1,7 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useSearchParams } from 'react-router';
 
+import { getErrorMessage } from '@/shared/api/api-error';
 import { AsyncBoundary } from '@/shared/components/async-boundary/async-boundary';
 import { EmptyState } from '@/shared/components/empty-state/empty-state';
 import { PageLayout } from '@/shared/components/page-layout/page-layout';
@@ -34,6 +35,12 @@ export function UsersPage() {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [editing, setEditing] = useState<User | 'create' | null>(null);
   const [confirmingDelete, setConfirmingDelete] = useState<string | null>(null);
+  const [mutationNotice, setMutationNotice] = useState<string | null>(null);
+  const panelRef = useRef<HTMLElement>(null);
+  const returnFocusRef = useRef<HTMLButtonElement>(null);
+  const deleteTriggerRef = useRef<HTMLButtonElement>(null);
+  const confirmDeleteRef = useRef<HTMLButtonElement>(null);
+  const ledgerRef = useRef<HTMLElement>(null);
   const roleResult = userRoleSchema.safeParse(searchParams.get('role'));
   const statusResult = userStatusSchema.safeParse(searchParams.get('status'));
   const params = {
@@ -45,6 +52,24 @@ export function UsersPage() {
   };
   const users = useQuery(userListQueryOptions(params));
   const deleteUser = useMutation(deleteUserMutationOptions(queryClient));
+
+  useEffect(() => {
+    if (editing || selectedId) panelRef.current?.focus();
+  }, [editing, selectedId]);
+
+  useEffect(() => {
+    if (confirmingDelete) confirmDeleteRef.current?.focus();
+  }, [confirmingDelete]);
+
+  const restorePanelTrigger = () => {
+    globalThis.setTimeout(() => returnFocusRef.current?.focus(), 0);
+  };
+
+  const closePanel = () => {
+    setEditing(null);
+    setSelectedId(null);
+    restorePanelTrigger();
+  };
 
   const updateSearch = (updates: Record<string, string>) => {
     const next = new URLSearchParams(searchParams);
@@ -65,8 +90,10 @@ export function UsersPage() {
       actions={
         <button
           type="button"
-          onClick={() => {
+          onClick={(event) => {
+            returnFocusRef.current = event.currentTarget;
             setEditing('create');
+            setSelectedId(null);
           }}
         >
           Create user
@@ -126,7 +153,12 @@ export function UsersPage() {
       </section>
 
       <div className={styles.workspace}>
-        <section className={styles.ledger} aria-label="User list">
+        <section
+          ref={ledgerRef}
+          className={styles.ledger}
+          aria-label="User list"
+          tabIndex={-1}
+        >
           <AsyncBoundary
             error={users.error}
             hasData={Boolean(users.data)}
@@ -183,7 +215,8 @@ export function UsersPage() {
                                 userDetailQueryOptions(user.id),
                               )
                             }
-                            onClick={() => {
+                            onClick={(event) => {
+                              returnFocusRef.current = event.currentTarget;
                               setSelectedId(user.id);
                               setEditing(null);
                             }}
@@ -193,7 +226,8 @@ export function UsersPage() {
                           <button
                             className={styles.textButton}
                             type="button"
-                            onClick={() => {
+                            onClick={(event) => {
+                              returnFocusRef.current = event.currentTarget;
                               setEditing(user);
                               setSelectedId(user.id);
                             }}
@@ -203,6 +237,7 @@ export function UsersPage() {
                           {confirmingDelete === user.id ? (
                             <>
                               <button
+                                ref={confirmDeleteRef}
                                 className={styles.dangerButton}
                                 type="button"
                                 disabled={deleteUser.isPending}
@@ -210,8 +245,15 @@ export function UsersPage() {
                                   deleteUser.mutate(user.id, {
                                     onSuccess: () => {
                                       setConfirmingDelete(null);
+                                      setMutationNotice(
+                                        `${user.name} was deleted.`,
+                                      );
                                       if (selectedId === user.id)
                                         setSelectedId(null);
+                                      globalThis.setTimeout(
+                                        () => ledgerRef.current?.focus(),
+                                        0,
+                                      );
                                     },
                                   });
                                 }}
@@ -223,6 +265,11 @@ export function UsersPage() {
                                 type="button"
                                 onClick={() => {
                                   setConfirmingDelete(null);
+                                  deleteUser.reset();
+                                  globalThis.setTimeout(
+                                    () => deleteTriggerRef.current?.focus(),
+                                    0,
+                                  );
                                 }}
                               >
                                 Cancel
@@ -232,13 +279,29 @@ export function UsersPage() {
                             <button
                               className={styles.textButton}
                               type="button"
-                              onClick={() => {
+                              onClick={(event) => {
+                                deleteTriggerRef.current = event.currentTarget;
+                                deleteUser.reset();
+                                setMutationNotice(null);
                                 setConfirmingDelete(user.id);
                               }}
                             >
                               Delete
                             </button>
                           )}
+                          {confirmingDelete === user.id &&
+                          deleteUser.isError ? (
+                            <p className={styles.mutationMessage} role="alert">
+                              {getErrorMessage(deleteUser.error)} Confirm to try
+                              again.
+                            </p>
+                          ) : null}
+                          {confirmingDelete === user.id &&
+                          deleteUser.isPaused ? (
+                            <p className={styles.mutationMessage} role="status">
+                              Delete is paused until the network reconnects.
+                            </p>
+                          ) : null}
                         </div>
                       </td>
                     </tr>
@@ -274,16 +337,24 @@ export function UsersPage() {
                 </button>
               </nav>
             ) : null}
+            {mutationNotice ? (
+              <p className={styles.srOnly} role="status">
+                {mutationNotice}
+              </p>
+            ) : null}
           </AsyncBoundary>
         </section>
 
         {editing ? (
-          <aside className={styles.detail}>
+          <aside
+            ref={panelRef}
+            className={styles.detail}
+            aria-label={editing === 'create' ? 'Create user' : 'Edit user'}
+            tabIndex={-1}
+          >
             <UserForm
               user={editing === 'create' ? undefined : editing}
-              onCancel={() => {
-                setEditing(null);
-              }}
+              onCancel={closePanel}
               onSuccess={(user) => {
                 setEditing(null);
                 setSelectedId(user.id);
@@ -293,9 +364,8 @@ export function UsersPage() {
         ) : selectedId ? (
           <UserDetail
             id={selectedId}
-            onClose={() => {
-              setSelectedId(null);
-            }}
+            panelRef={panelRef}
+            onClose={closePanel}
             onEdit={(user) => {
               setEditing(user);
             }}

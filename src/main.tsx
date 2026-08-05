@@ -1,22 +1,23 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 
-import { env } from '@/app/config/env';
+import { env, startDevelopmentMocks } from '@/app/config/env';
 import { AppProvider } from '@/app/providers/app-provider';
+import { authApi } from '@/features/auth/api/auth.api';
 import { configureApiClient } from '@/shared/api/api-client';
+import { createAuthRefreshCoordinator } from '@/shared/api/auth-refresh';
 
 import '@/app/styles/globals.css';
 
-configureApiClient({ baseUrl: env.apiUrl });
-
-const enableMocking = async (): Promise<void> => {
-  if (!env.enableMsw) return;
-  const { worker } = await import('@/mocks/browser');
-  await worker.start({ onUnhandledRequest: 'bypass' });
-};
+configureApiClient({
+  authRefresh: createAuthRefreshCoordinator({
+    refresh: () => authApi.refresh(),
+  }),
+  baseUrl: env.apiUrl,
+});
 
 const start = async (): Promise<void> => {
-  await enableMocking();
+  await startDevelopmentMocks();
   const root = document.getElementById('root');
   if (!root) throw new Error('Missing #root application element.');
 

@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { NavLink, Outlet, useNavigate } from 'react-router';
 
 import { logoutMutationOptions } from '@/features/auth/api/auth.queries';
+import { getErrorMessage } from '@/shared/api/api-error';
 import styles from './routes.module.css';
 
 export function ProtectedLayout() {
@@ -26,18 +27,30 @@ export function ProtectedLayout() {
             Users
           </NavLink>
         </nav>
-        <button
-          className={styles.logout}
-          type="button"
-          disabled={logout.isPending}
-          onClick={() => {
-            logout.mutate(undefined, {
-              onSuccess: () => void navigate('/login', { replace: true }),
-            });
-          }}
-        >
-          {logout.isPending ? 'Signing out…' : 'Sign out'}
-        </button>
+        <div className={styles.logoutGroup}>
+          {logout.isError ? (
+            <p className={styles.logoutMessage} role="alert">
+              {getErrorMessage(logout.error)} Try again.
+            </p>
+          ) : null}
+          {logout.isPaused ? (
+            <p className={styles.logoutMessage} role="status">
+              Sign out is paused until the network reconnects.
+            </p>
+          ) : null}
+          <button
+            className={styles.logout}
+            type="button"
+            disabled={logout.isPending}
+            onClick={() => {
+              logout.mutate(undefined, {
+                onSuccess: () => void navigate('/login', { replace: true }),
+              });
+            }}
+          >
+            {logout.isPending ? 'Signing out…' : 'Sign out'}
+          </button>
+        </div>
       </aside>
       <main className={styles.content}>
         <Outlet />

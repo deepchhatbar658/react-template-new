@@ -15,7 +15,7 @@
   place-items: center;
   border-radius: var(--radius-sm);
   background: var(--color-primary);
-  color: white;
+  color: var(--color-on-primary);
   font-weight: 800;
 }
 
@@ -50,6 +50,7 @@
   place-items: center;
   border-radius: var(--radius-sm);
   background: var(--color-primary);
+  color: var(--color-on-primary);
 }
 
 .navLink,
@@ -71,6 +72,22 @@
   border-color: var(--color-sidebar-border);
   background: transparent;
   color: white;
+}
+
+.logoutGroup {
+  display: grid;
+  gap: var(--space-2);
+  margin-top: auto;
+}
+
+.logoutGroup .logout {
+  margin-top: 0;
+}
+
+.logoutMessage {
+  margin: 0;
+  color: var(--color-sidebar-text);
+  font-size: var(--font-size-xs);
 }
 
 .content {
@@ -96,6 +113,10 @@
   }
 
   .logout {
+    margin-top: 0;
+  }
+
+  .logoutGroup {
     margin-top: 0;
   }
 

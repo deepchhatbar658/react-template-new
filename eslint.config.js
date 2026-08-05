@@ -1,4 +1,7 @@
+/// <reference types="node" />
+
 import js from '@eslint/js';
+import { readdirSync } from 'node:fs';
 import { defineConfig } from 'eslint/config';
 import query from '@tanstack/eslint-plugin-query';
 import importX from 'eslint-plugin-import-x';
@@ -10,6 +13,19 @@ import globals from 'globals';
 import tseslint from 'typescript-eslint';
 
 const sourceFiles = ['src/**/*.{ts,tsx}'];
+const featureDirectories = readdirSync(
+  new URL('./src/features', import.meta.url),
+  { withFileTypes: true },
+)
+  .filter((entry) => entry.isDirectory())
+  .map((entry) => entry.name);
+
+const featureIsolationZones = featureDirectories.map((feature) => ({
+  target: `./src/features/${feature}`,
+  from: './src/features',
+  except: [`./${feature}`],
+  message: 'A feature may import only files from itself and shared code.',
+}));
 
 export default defineConfig(
   {
@@ -79,6 +95,30 @@ export default defineConfig(
   {
     files: sourceFiles,
     rules: {
+      'import-x/no-restricted-paths': [
+        'error',
+        {
+          basePath: import.meta.dirname,
+          zones: [
+            {
+              target: './src/shared',
+              from: ['./src/app', './src/features', './src/routes'],
+              message: 'Shared code may import only other shared code.',
+            },
+            {
+              target: './src/features',
+              from: ['./src/app', './src/routes'],
+              message: 'Features may not import app or route code.',
+            },
+            ...featureIsolationZones,
+            {
+              target: './src/routes',
+              from: './src/app',
+              message: 'Routes may not import app code.',
+            },
+          ],
+        },
+      ],
       'no-restricted-syntax': [
         'error',
         {
