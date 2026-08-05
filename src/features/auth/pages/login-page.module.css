@@ -1,0 +1,18 @@
+.card {
+  width: min(100%, 27rem);
+  border-radius: var(--radius-lg);
+  padding: clamp(var(--space-5), 6vw, var(--space-7));
+  background: var(--color-surface);
+  box-shadow: var(--shadow-overlay);
+}
+
+.card h1 {
+  margin: var(--space-2) 0 var(--space-3);
+  font-size: var(--font-size-title);
+  letter-spacing: -0.04em;
+}
+
+.intro {
+  margin: 0 0 var(--space-6);
+  color: var(--color-muted);
+}

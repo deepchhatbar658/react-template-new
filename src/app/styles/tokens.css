@@ -1,0 +1,66 @@
+/*
+THESIS: Network state is the interface's strongest signal; decorative dashboard chrome is refused.
+OWN-WORLD: Cool paper, white work surfaces, ink navigation, and a single operational indigo accent.
+STORY: Sign in, find a user, understand state, and complete CRUD work without losing successful data.
+FIRST VIEWPORT: A compact dark rail frames a wide ledger with filters, records, and one create action.
+FORM: Restrained operations ledger, first-ranked for clarity; seed key operate-ledger-2026.
+*/
+:root {
+  color-scheme: light;
+  --color-canvas: #f5f7fb;
+  --color-surface: #ffffff;
+  --color-surface-subtle: #eef1f7;
+  --color-ink: #111827;
+  --color-text: #182033;
+  --color-muted: #59647a;
+  --color-border: #d8deea;
+  --color-primary: #4f46e5;
+  --color-primary-hover: #3730a3;
+  --color-primary-soft: #eeedff;
+  --color-danger: #b42318;
+  --color-danger-soft: #fff0ed;
+  --color-success: #16794a;
+  --color-success-soft: #e8f7ef;
+  --color-warning: #f6d365;
+  --color-warning-text: #2c2100;
+  --color-sidebar-text: #cbd5e1;
+  --color-sidebar-active: #263146;
+  --color-sidebar-border: #475569;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4rem;
+  --font-size-sm: 0.875rem;
+  --font-size-xs: 0.8125rem;
+  --font-size-title: clamp(1.75rem, 4vw, 2.75rem);
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-pill: 999px;
+  --shadow-overlay: 0 1rem 3rem rgb(17 24 39 / 18%);
+  --focus-ring: 0 0 0 3px rgb(79 70 229 / 30%);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+    --color-canvas: #101522;
+    --color-surface: #182033;
+    --color-surface-subtle: #222c42;
+    --color-ink: #080b12;
+    --color-text: #f1f5f9;
+    --color-muted: #a9b3c6;
+    --color-border: #344158;
+    --color-primary: #8b83ff;
+    --color-primary-hover: #a9a4ff;
+    --color-primary-soft: #292654;
+    --color-danger: #ff9b8f;
+    --color-danger-soft: #4a201d;
+    --color-success: #65d49c;
+    --color-success-soft: #163a2a;
+  }
+}

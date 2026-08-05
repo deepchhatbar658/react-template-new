@@ -1,0 +1,33 @@
+.form {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.field {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.field label {
+  font-weight: 700;
+}
+
+.field p,
+.formError {
+  margin: 0;
+  color: var(--color-danger);
+  font-size: var(--font-size-sm);
+}
+
+.formError {
+  border-radius: var(--radius-sm);
+  padding: var(--space-3);
+  background: var(--color-danger-soft);
+}
+
+.demoNote {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: var(--font-size-xs);
+  text-align: center;
+}

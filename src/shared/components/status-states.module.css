@@ -1,0 +1,72 @@
+.loading,
+.empty,
+.error {
+  display: flex;
+  min-height: 12rem;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-6);
+  text-align: center;
+}
+
+.spinner {
+  width: 1.25rem;
+  height: 1.25rem;
+  border: 2px solid var(--color-border);
+  border-top-color: var(--color-primary);
+  border-radius: 50%;
+  animation: spin 700ms linear infinite;
+}
+
+.error {
+  border-radius: var(--radius-md);
+  background: var(--color-danger-soft);
+  color: var(--color-danger);
+}
+
+.empty {
+  color: var(--color-muted);
+}
+
+.background,
+.backgroundError {
+  margin: 0 0 var(--space-2);
+  color: var(--color-muted);
+  font-size: 0.875rem;
+}
+
+.backgroundError {
+  color: var(--color-danger);
+}
+
+.offline,
+.activity {
+  position: fixed;
+  z-index: 20;
+  inset: 0 0 auto;
+  padding: var(--space-2) var(--space-4);
+  background: var(--color-warning);
+  color: var(--color-warning-text);
+  text-align: center;
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+
+.activity {
+  background: var(--color-ink);
+  color: white;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(1turn);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spinner {
+    animation-duration: 1.5s;
+  }
+}

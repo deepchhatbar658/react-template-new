@@ -1,0 +1,35 @@
+.page {
+  width: min(100%, 78rem);
+  margin-inline: auto;
+}
+
+.header {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: var(--space-5);
+  margin-bottom: var(--space-6);
+}
+
+.header h1 {
+  margin: 0 0 var(--space-2);
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  letter-spacing: -0.03em;
+}
+
+.header p {
+  max-width: 65ch;
+  margin: 0;
+  color: var(--color-muted);
+}
+
+.actions {
+  flex: none;
+}
+
+@media (max-width: 40rem) {
+  .header {
+    align-items: stretch;
+    flex-direction: column;
+  }
+}

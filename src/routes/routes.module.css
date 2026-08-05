@@ -1,0 +1,105 @@
+.publicShell {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: var(--space-6);
+  background: var(--color-canvas);
+}
+
+.brandMark {
+  position: fixed;
+  inset: var(--space-5) auto auto var(--space-5);
+  display: grid;
+  width: 2.5rem;
+  height: 2.5rem;
+  place-items: center;
+  border-radius: var(--radius-sm);
+  background: var(--color-primary);
+  color: white;
+  font-weight: 800;
+}
+
+.appShell {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 14rem minmax(0, 1fr);
+}
+
+.sidebar {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-7);
+  padding: var(--space-5);
+  background: var(--color-ink);
+  color: white;
+}
+
+.wordmark {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.wordmark span {
+  display: grid;
+  width: 2rem;
+  height: 2rem;
+  place-items: center;
+  border-radius: var(--radius-sm);
+  background: var(--color-primary);
+}
+
+.navLink,
+.activeNav {
+  display: block;
+  border-radius: var(--radius-sm);
+  padding: var(--space-3);
+  color: var(--color-sidebar-text);
+  text-decoration: none;
+}
+
+.activeNav {
+  background: var(--color-sidebar-active);
+  color: white;
+}
+
+.logout {
+  margin-top: auto;
+  border-color: var(--color-sidebar-border);
+  background: transparent;
+  color: white;
+}
+
+.content {
+  min-width: 0;
+  padding: clamp(var(--space-4), 4vw, var(--space-8));
+}
+
+@media (max-width: 48rem) {
+  .appShell {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    position: static;
+    height: auto;
+    flex-direction: row;
+    align-items: center;
+    padding: var(--space-3) var(--space-4);
+  }
+
+  .sidebar nav {
+    margin-left: auto;
+  }
+
+  .logout {
+    margin-top: 0;
+  }
+
+  .wordmark strong {
+    display: none;
+  }
+}
